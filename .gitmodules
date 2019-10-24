@@ -1,0 +1,6 @@
+[submodule "osa1/kurssitiedot"]
+	path = osa1/kurssitiedot
+	url = https://github.com/Freshbrewed/FullstackDev
+[submodule "osa1/unicafe"]
+	path = osa1/unicafe
+	url = https://github.com/Freshbrewed/FullstackDev
