@@ -11,14 +11,27 @@ const Button = (props) => {
     )
 }
 
+const DisplayVotes = (props) => {
+    return (
+        <div>has zero {props.anecdoteNumber} votes</div>
+    )
+}
+
 const App = (props) => {
     const [selected, setSelected] = useState(0)
+    const [vote, setVote] = useState(0)
     const min = 0
     const max = 5
+    const points = new Array(6).fill(0)
+    
+    
 
-    const HandleClick = () => {  
-
+    const HandleAnecdoteClick = () => {  
         setSelected(RandomInterval([min, max]))
+    }
+
+    const HandleVoteClick = () => {
+        setVote(vote+1)
     }
 
     // Palauttaa satunnaisen numeron [0]=min ja [1]=max väliltä.
@@ -26,13 +39,15 @@ const App = (props) => {
 
 
 
-    
+
     return (
       <div>
+        {console.log(props)}
         {console.log(selected)}
         {props.anecdotes[selected]}
-        <div></div>
-        <Button onClick={HandleClick} text={"Next anecdote"} />
+        <DisplayVotes anecdoteNumber={selected} />
+        <Button onClick={HandleVoteClick} text={"Vote"} />
+        <Button onClick={HandleAnecdoteClick} text={"Next anecdote"} />
       </div>
     )
   }
