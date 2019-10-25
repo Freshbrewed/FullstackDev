@@ -30,7 +30,7 @@ const Sum = (props) => <td>{props.good + props.bad + props.neutral}</td>
 const Statistic = (props) => {
     return (
     <tr>
-        <td>{props.text}</td><td>{props.value}{" ", props.ending}</td>
+        <td>{props.text}</td><td>{props.value}{props.ending}</td>
     </tr>
     )
 }
@@ -88,6 +88,7 @@ const App = () => {
       title: "Statistics"
     }
   ]
+  // Alustetaan tarvittavat muuttujat
   const average = Average({good,neutral,bad})
   const sum = Sum({good,neutral,bad})
   const positive = PositivePercentage({good,sum})
