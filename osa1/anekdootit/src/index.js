@@ -14,7 +14,7 @@ const Button = (props) => {
 const DisplayVotes = (props) => {
   console.log(props)
     return (
-        <div>has zero {props.points[props.index]} votes</div>
+        <div>has {props.points[props.index]} votes</div>
     )
 }
 
@@ -73,8 +73,8 @@ const App = (props) => {
         <Button onClick={handleVoteClick} text={"Vote"} />
         <Button onClick={handleAnecdoteClick} text={"Next anecdote"} />
         <h1>Anecdote with most votes</h1>
-        <DisplayVotes points={points} index={mostVotesByIndex()} />
         {props.anecdotes[mostVotesByIndex()]}
+        <DisplayVotes points={points} index={mostVotesByIndex()} />
       </div>
     )
   }
