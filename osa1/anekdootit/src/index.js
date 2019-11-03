@@ -12,10 +12,13 @@ const Button = (props) => {
 }
 
 const DisplayVotes = (props) => {
+  console.log(props)
     return (
-        <div>has zero {props.points[props.anecdoteNumber]} votes</div>
+        <div>has zero {props.points[props.index]} votes</div>
     )
 }
+
+
 
 
 const App = (props) => {
@@ -44,6 +47,18 @@ const App = (props) => {
       }))
     }
 
+    const mostVotesByIndex = () => {
+      let biggest = -1
+      let index = 0
+      for (let i = 0; i < points.length; i++) {
+        if ( points[i] > biggest ) {
+          biggest = points[i]
+          index = i
+        } 
+      }
+      return index
+    }
+
     // Palauttaa satunnaisen numeron 0-5 väliltä.
     const randomInterval = (props) => Math.floor(Math.random() * (props[1] - props[0] + 1) + props[0])
 
@@ -52,10 +67,14 @@ const App = (props) => {
     console.log(points, "points")
     return (
       <div>
+        <h1>Anecdote of the day</h1>
         {props.anecdotes[selected]}
-        <DisplayVotes anecdoteNumber={selected} points={points} />
+        <DisplayVotes index={selected} points={points} />
         <Button onClick={handleVoteClick} text={"Vote"} />
         <Button onClick={handleAnecdoteClick} text={"Next anecdote"} />
+        <h1>Anecdote with most votes</h1>
+        <DisplayVotes points={points} index={mostVotesByIndex()} />
+        {props.anecdotes[mostVotesByIndex()]}
       </div>
     )
   }
