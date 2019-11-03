@@ -21,7 +21,7 @@ const Button = (props) => {
 
 const Average = (props) => {
   return (
-  <td>{(props.good + props.bad + props.neutral) / 3}</td>
+  <td>{(props.good + props.bad*(-1)) / (props.good + props.bad + props.neutral)}</td>
   )
 }
 
@@ -43,7 +43,7 @@ const Statistics = (props) => {
         <Statistic value={props.values[1]} text="Neutral " />
         <Statistic value={props.values[2]} text="Bad " />
         <Statistic value={props.statValues[1].props.children} text="All "  />
-        <Statistic value={props.statValues[0].props.children} text="Average  " />
+        <Statistic value={props.statValues[0].props.children}  text="Average  " />
         <Statistic value={props.statValues[2].props.children} text="Positive " ending="%" />
       </tbody>
 
