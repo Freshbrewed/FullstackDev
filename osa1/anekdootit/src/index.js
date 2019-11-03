@@ -12,7 +12,6 @@ const Button = (props) => {
 }
 
 const DisplayVotes = (props) => {
-  console.log(props.points)
     return (
         <div>has zero {props.points[props.anecdoteNumber]} votes</div>
     )
