@@ -12,42 +12,51 @@ const Button = (props) => {
 }
 
 const DisplayVotes = (props) => {
+  console.log(props.points)
     return (
-        <div>has zero {props.anecdoteNumber} votes</div>
+        <div>has zero {props.points[props.anecdoteNumber]} votes</div>
     )
 }
+
 
 const App = (props) => {
     const [selected, setSelected] = useState(0)
     const [vote, setVote] = useState(0)
     const min = 0
     const max = 5
-    const points = new Array(6).fill(0)
+    const [points, setPoints] = useState(new Array(6).fill(0))
     
     
-
-    const HandleAnecdoteClick = () => {  
-        setSelected(RandomInterval([min, max]))
+    const handleAnecdoteClick = () => {  
+        setSelected(randomInterval([min, max]))
     }
 
-    const HandleVoteClick = () => {
-        setVote(vote+1)
+    const handleVoteClick = () => {
+      addVote()
+      setVote(vote+1)
+      
     }
 
-    // Palauttaa satunnaisen numeron [0]=min ja [1]=max väliltä.
-    const RandomInterval = (props) => Math.floor(Math.random() * (props[1] - props[0] + 1) + props[0])
+    const addVote = () => {
+      setPoints(points.map((element, index) => {
+        if ( selected === index ) 
+        return element+1
+        else return element
+      }))
+    }
 
+    // Palauttaa satunnaisen numeron 0-5 väliltä.
+    const randomInterval = (props) => Math.floor(Math.random() * (props[1] - props[0] + 1) + props[0])
 
-
-
+    console.log(props, "anecdotes array")
+    console.log(selected, "selected")
+    console.log(points, "points")
     return (
       <div>
-        {console.log(props)}
-        {console.log(selected)}
         {props.anecdotes[selected]}
-        <DisplayVotes anecdoteNumber={selected} />
-        <Button onClick={HandleVoteClick} text={"Vote"} />
-        <Button onClick={HandleAnecdoteClick} text={"Next anecdote"} />
+        <DisplayVotes anecdoteNumber={selected} points={points} />
+        <Button onClick={handleVoteClick} text={"Vote"} />
+        <Button onClick={handleAnecdoteClick} text={"Next anecdote"} />
       </div>
     )
   }
