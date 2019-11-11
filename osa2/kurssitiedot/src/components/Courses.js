@@ -11,7 +11,7 @@ const Header = (props) => {
 }
 
 const Content = ({parts}) => {
-  console.log(parts, "Content component");
+  console.log(parts, "Content component")
     return (
       parts.map(part => <Part part={part.name} exercises={part.exercises} key={part.id} />)
     )
@@ -45,4 +45,11 @@ const Course = (props) => {
   )
 }
 
-export default Course
+const Courses = ({courses}) => {
+  console.log(courses, "courses component")
+  return (
+    courses.map((course,index) => <Course course={course.name} parts={course.parts} key={index} />)
+  )
+}
+
+export default Courses

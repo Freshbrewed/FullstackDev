@@ -1,14 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Course from './components/Course'
+import Courses from './components/Courses'
 
 
-const Courses = ({courses}) => {
-  console.log(courses, "courses component")
-  return (
-    courses.map((course,index) => <Course course={course.name} parts={course.parts} key={index} />)
-  )
-}
+
 //
 const App = () => {
   
