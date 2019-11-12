@@ -3,11 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios'
 import Filter from './components/Filter'
 
-const Button = ({onClick}) => {
-    return (
-        <button onClick={onClick}>show</button>
-    )
-}
+
 
 const ShowCountry = ({countries}) => {
     return (
@@ -32,7 +28,7 @@ const ShowCountry = ({countries}) => {
     )
 }
 
-const ShowCountries = ({countries, onClick}) => {
+const ShowCountries = ({countries, handleButton}) => {
     
     if (countries.length > 10) {
         return (
@@ -47,14 +43,19 @@ const ShowCountries = ({countries, onClick}) => {
     }
     return (
         <div>{countries.map((country, index) =>
-             <div key={index}> {country.name} <Button onClick={onClick}/> </div>)}</div>
+             <div key={index}> {country.name} <button onClick={() => handleButton(country)}>show</button> </div>)}</div>
     )
 }
 
 const App = () => {
+    const [ weather, setWeather] = useState([])
     const [ countries, setCountries] = useState([])
     const [ newSearch, setNewSearch] = useState('')
     const filteredBySearch = countries.filter(country => country.name.toLocaleLowerCase().includes(newSearch))
+    const params = {
+        access_key: '73b61c2eaade5c31bfbeab9a452cc8a7',
+        query: 'Helsinki'
+    }
 
     useEffect(() => {
         axios.get('https://restcountries.eu/rest/v2/all').then(response => {setCountries(response.data)})
@@ -62,19 +63,27 @@ const App = () => {
     console.log('render', countries.length, 'countries')
 
 
+    useEffect(() => {
+        axios.get('https://api.weatherstack.com/current', {params}).then(response => {setWeather(response.data)})
+      }, [])
+    console.log('render', weather, 'weather')
+
+
+
     const handleSearchChange = (event) => {
       setNewSearch(event.target.value)
      }
 
-     const handleButtonClick = () => {
-         console.log('clicked')
+     const handleButtonClick = ({country}) => {
+         console.log(country)
+         setCountries([country])
      }
 
 
     return (
         <div>
         <Filter onChange={handleSearchChange} />
-        <ShowCountries countries={filteredBySearch} onClick={handleButtonClick}/>
+        <ShowCountries countries={filteredBySearch} handleButton={handleButtonClick}/>
         </div>
 
     )
