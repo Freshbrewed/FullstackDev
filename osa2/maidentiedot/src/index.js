@@ -23,10 +23,6 @@ const ShowCountry = ({countries}) => {
                         </div>)}
                  </ul>
                 <img src={country.flag} style={{width:20 + '%'}} alt={'flag'}></img>
-                <h3>Weather in {country.name}</h3>
-                <b>Temperature:</b>
-                <img ></img>
-                <b>Wind:</b>
                 </div>)}
            </div>
         )
