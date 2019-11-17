@@ -6,15 +6,43 @@ import Filter from './components/Filter'
 
 
 const ShowCountry = ({countries}) => {
+        return (
+            <div>{countries.map(country =>
+                <div key={country.alpha3Code}>
+                  <h1>{country.name}</h1> 
+                  <p>Capital {country.capital}</p>
+                  <p>Population {country.population}</p>
+                  <h3>Languages</h3>
+                  <ul>
+                      {countries.map(country => 
+                        <div key={country.name}>  
+                            {country.languages.map((language, index) => 
+                                 <li key={index}>
+                                     {language.name}
+                                 </li>)}
+                        </div>)}
+                 </ul>
+                <img src={country.flag} style={{width:20 + '%'}} alt={'flag'}></img>
+                <h3>Weather in {country.name}</h3>
+                <b>Temperature:</b>
+                <img ></img>
+                <b>Wind:</b>
+                </div>)}
+           </div>
+        )
+    }
+
+const ShowClicked = ({clickedCountry, weather}) => {
+    console.log(clickedCountry)
     return (
-        <div>{countries.map(country =>
+        <div>{clickedCountry.map(country =>
             <div key={country.alpha3Code}>
               <h1>{country.name}</h1> 
               <p>Capital {country.capital}</p>
               <p>Population {country.population}</p>
               <h3>Languages</h3>
               <ul>
-                  {countries.map(country => 
+                  {clickedCountry.map(country => 
                     <div key={country.name}>  
                         {country.languages.map((language, index) => 
                              <li key={index}>
@@ -28,8 +56,25 @@ const ShowCountry = ({countries}) => {
     )
 }
 
+const ShowWeather = ({weather}) => {
+    console.log(weather)
+    if (weather.success === false) {
+        return (
+            <div></div>
+        )
+    }
+    else return (
+        <div>{weather.map((navigation, index) => 
+            <div key={index}>
+                {navigation.location.map(country => 
+                <h3>Weather in {country.name}</h3>)}
+            </div>)}
+        </div>
+    )
+}
+
+
 const ShowCountries = ({countries, handleButton}) => {
-    
     if (countries.length > 10) {
         return (
             <div>Too many matches, specify another filter.</div>
@@ -38,7 +83,7 @@ const ShowCountries = ({countries, handleButton}) => {
 
     if (countries.length === 1) {
         return (
-            <ShowCountry countries={countries}/> 
+            <ShowCountry countries={countries} /> 
         )
     }
     return (
@@ -48,44 +93,45 @@ const ShowCountries = ({countries, handleButton}) => {
 }
 
 const App = () => {
+    const [ query, setQuery] = useState('')
     const [ weather, setWeather] = useState([])
     const [ countries, setCountries] = useState([])
+    const [ clickedCountry, setCountry] = useState([])
     const [ newSearch, setNewSearch] = useState('')
     const filteredBySearch = countries.filter(country => country.name.toLocaleLowerCase().includes(newSearch))
+    const capitals = countries.map(country => country.capital)
     const params = {
         access_key: '73b61c2eaade5c31bfbeab9a452cc8a7',
-        query: 'Helsinki'
-    }
-
+        query: query[0]
+      }
+    
     useEffect(() => {
         axios.get('https://restcountries.eu/rest/v2/all').then(response => {setCountries(response.data)})
       }, [])
-    console.log('render', countries.length, 'countries')
-
 
     useEffect(() => {
-        axios.get('https://api.weatherstack.com/current', {params}).then(response => {setWeather(response.data)})
-      }, [])
-    console.log('render', weather, 'weather')
+        axios.get('http://api.weatherstack.com/current', {params}).then(response => {setWeather(response.data)})
+      }, [query])
+
 
 
 
     const handleSearchChange = (event) => {
-      setNewSearch(event.target.value)
+      setCountry([])
+      setNewSearch(event.target.value.toLocaleLowerCase())
      }
 
-     const handleButtonClick = ({country}) => {
-         console.log(country)
-         setCountries([country])
+     const handleButtonClick = (country) => {
+         setQuery(capitals.filter(capital => capital === country.capital))
+         setCountry([country])  
      }
-
 
     return (
         <div>
         <Filter onChange={handleSearchChange} />
-        <ShowCountries countries={filteredBySearch} handleButton={handleButtonClick}/>
+        <ShowCountries countries={filteredBySearch} handleButton={handleButtonClick} weather={weather}/>
+        <ShowClicked clickedCountry={clickedCountry} weather={weather} />
         </div>
-
     )
 }
 
