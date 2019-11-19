@@ -10,15 +10,14 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ newSearch, setNewSearch] = useState('')
+  const [ refresh, setRefresh] = useState(0)
 
   useEffect(() => {
     personService
     .getAll()
     .then(initialPersons => {
       setPersons(initialPersons)})
-  }, [])
-  console.log('Rendered', persons.length, 'persons')
-
+  }, [refresh])
 
 
 
@@ -28,11 +27,15 @@ const App = () => {
     const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1
+        id: Date.now()
     }
 
-    if (persons.filter(person => personObject.name === person.name).length > 0) {
-        window.alert(`${personObject.name} is already added to phonebook.`)
+    if (persons.find(person => personObject.name.toLowerCase() === person.name.toLowerCase())) {
+       if (window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`)) {
+         const personToUpdate = persons.find(person => personObject.name.toLowerCase() === person.name.toLowerCase())
+         console.log(personToUpdate)
+          updatePerson(personToUpdate)
+       }
     }
     else {
         personService
@@ -45,6 +48,32 @@ const App = () => {
         })
     }
   }
+
+  const updatePerson = (personToUpdate) => {
+    const changedPerson = { ...personToUpdate, number: newNumber}
+
+    personService
+    .update(changedPerson.id, changedPerson)
+    .then(updatedPerson => {
+      setPersons(persons.map(person => person.id !== personToUpdate ? person : updatedPerson))
+      setRefresh(refresh+1)
+    })
+  }
+
+
+  const deletePerson = (id) => {
+    const person = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+      .remove(id)
+      .then(response => {
+        console.log('RESPONSE', response)
+        setRefresh(refresh+1)
+      })
+    }
+  }
+
+
 
 
 
@@ -60,18 +89,15 @@ const App = () => {
       setNewSearch(event.target.value)
   }
 
-  const handleDelete = () => {
-
-  }
-
+  console.log(persons)
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter onChange={handleSearchChange}  />
       <h3>Add a new</h3>
-      <PersonForm value={[newName, newNumber]} onChange={[handlePersonChange,handleNumberChange]} onSubmit={addPerson}/>
+      <PersonForm name={newName} number={newNumber} onChange={[handlePersonChange,handleNumberChange]} onSubmit={addPerson}/>
       <h2>Numbers </h2>
-      <ShowPersons persons={persons} search={newSearch} />
+      <ShowPersons persons={persons} search={newSearch} deletePerson={deletePerson} />
     </div>
   )
 
