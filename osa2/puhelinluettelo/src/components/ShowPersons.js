@@ -9,8 +9,8 @@ const ShowPersons = ({persons, search, deletePerson}) => {
     return (
       <div>{filtered.map(person =>
          <div key={person.id}>
-         {person.name} {person.number}
-          <button onClick={() => deletePerson(person.id)} >delete</button>
+         {person.name} {person.number} &nbsp;
+          <button onClick={() => deletePerson(person.id)}> Delete</button>
          </div>)}
       </div>
     )
