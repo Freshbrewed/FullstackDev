@@ -59,7 +59,7 @@ const App = () => {
           setNewNumber('')
         })
         .catch(error => {
-         setErrorMessage(`New person could not be added.`)
+         setErrorMessage(`New person could not be added. Make sure name-field & number-field are not empty!`)
           setTimeout(()=> {
            setErrorMessage(null)
            setRefresh(refresh+1)
