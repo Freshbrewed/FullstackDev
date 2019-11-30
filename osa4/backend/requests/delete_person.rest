@@ -1,0 +1,3 @@
+
+DELETE HTTP://localhost:3003/api/blogs/
+
