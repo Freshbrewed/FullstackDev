@@ -33,25 +33,17 @@ const mostBlogs = (blogs) => {
     - authors.filter(element => element ===b).length
   }).pop()
   const authorWithBlogs = blogs.filter(blog => blog.author === winningAuthor)
-  console.log(winningAuthor)
-  console.log(authorWithBlogs)
+
   let count = 0
   authorWithBlogs.forEach(() => {
     count += 1
   })
-
   return [
     {
       author: winningAuthor,
       blogs: count
     }
   ]
-}
-
-const mostLikes = (blogs) => {
-  if (blogs.length === 0) return null
-
-  return 1
 }
 
 
@@ -61,5 +53,4 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
 }
