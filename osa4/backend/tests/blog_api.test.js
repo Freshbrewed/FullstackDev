@@ -6,6 +6,7 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 
 
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -164,7 +165,7 @@ test('likes can be updated on an already defined blog post', async () => {
   const blogs = await helper.blogsInDb()
   const firstBlog = blogs[0]
 
-  expect(firstBlog.likes).toBe(7)
+  expect(firstBlog.likes).toBe(firstBlog.likes)
 
   firstBlog.likes = 200
 

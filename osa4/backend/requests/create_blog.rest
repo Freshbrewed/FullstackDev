@@ -1,9 +1,11 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer wyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVybm9zZXBwYW5lbiIsImlkIjoiNWRmMDAwOTE5MDA1ZTcyMTM5NmI2YWYyIiwiaWF0IjoxNTc2MDEwMDk3fQ.X9E-WNx1I0fC6sz4pwS6h634mFZfttF1E1-BRq6d-sw
+
 
 {
-    "title": "The Blog test",
+    "url": "www.anotherexample.com",
+    "title": "Another test",
     "author": "Erno Seppänen",
-    "url": "www.example.com",
-    "likes": 1234
+    "likes": 22
 }
