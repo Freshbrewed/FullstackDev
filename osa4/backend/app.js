@@ -31,7 +31,7 @@ app.use(middleware.requestLogger)
 
 
 // THIS IS HANGING/////////////////////////
-app.use(middleware.tokenExtractor)
+//app.use(middleware.tokenExtractor)
 //////////////////////////////////////////////7
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)

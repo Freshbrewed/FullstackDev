@@ -1,11 +1,11 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer wyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVybm9zZXBwYW5lbiIsImlkIjoiNWRmMDAwOTE5MDA1ZTcyMTM5NmI2YWYyIiwiaWF0IjoxNTc2MDEwMDk3fQ.X9E-WNx1I0fC6sz4pwS6h634mFZfttF1E1-BRq6d-sw
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2V2aXJ0YW5lIiwiaWQiOiI1ZGYzYmFiMjcwYzQzODE3Mjg1NTE4Y2MiLCJpYXQiOjE1NzYyNTQxNjN9.KzNVxqLmWHm74aEWO8IZ6l7eOtRMntTBA466as7MYK0
 
 
 {
-    "url": "www.anotherexample.com",
+    "url": "www.DELETE.com",
     "title": "Another test",
-    "author": "Erno Seppänen",
-    "likes": 22
+    "author": "JAKE",
+    "likes": 2223
 }
