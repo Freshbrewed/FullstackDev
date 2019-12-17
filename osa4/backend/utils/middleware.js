@@ -30,15 +30,16 @@ morgan.token('body', (request) => {
   return JSON.stringify(request.body)
 })
 
-const tokenExtractor = request => {
+const tokenExtractor = (request, res, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    console.log('DEBUGGING before', request.token)
     request.token = authorization.substring(7)
-    console.log('DEBUGGING captured token', request.token)
-    return request.token
+    console.log('captured token: ', request.token)
   }
-  else return request.token = null
+  else {
+    request.token = null
+  }
+  next()
 }
 
 module.exports = {

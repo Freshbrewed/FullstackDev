@@ -27,12 +27,9 @@ app.use(express.static('build'))
 
 app.use(bodyParser.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 //app.use(middleware.morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-
-// THIS IS HANGING/////////////////////////
-//app.use(middleware.tokenExtractor)
-//////////////////////////////////////////////7
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)

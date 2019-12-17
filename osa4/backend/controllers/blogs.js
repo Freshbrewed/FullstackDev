@@ -22,23 +22,17 @@ blogsRouter.get('/:id', async (request, response, next) => {
   }
 })
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
+
 
 blogsRouter.delete('/:id', async (request, response, next) => {
-  const token = getTokenFrom(request)
+
 
   let decodedToken = null
 
   try {
     // eslint-disable-next-line no-undef
-    decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.id) return response.status(401).json({ error: 'token missing or invalid' })
+    decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) return response.status(401).json({ error: 'token missing or invalid' })
   } catch(exception) {
     next(exception)
   }
@@ -63,14 +57,12 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  const token = getTokenFrom(request)
-
   let decodedToken = null
 
   try {
     // eslint-disable-next-line no-undef
-    decodedToken = jwt.verify(token, process.env.SECRET)
-    if (!token || !decodedToken.id) return response.status(401).json({ error: 'token missing or invalid' })
+    decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!request.token || !decodedToken.id) return response.status(401).json({ error: 'token missing or invalid' })
   } catch(exception) {
     next(exception)
   }
