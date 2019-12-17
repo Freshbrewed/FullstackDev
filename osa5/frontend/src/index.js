@@ -18,6 +18,8 @@ const App = () => {
     const [newUrl, setNewUrl] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
     const [message, setMessage] = useState(null)
+    const [show, setShow] = useState(false)
+    const [showBlog, setShowBlog] = useState(false)
 
     useEffect(() => {
         blogService
@@ -102,7 +104,16 @@ const App = () => {
             }, 5000)
         }
         
-    }  
+    }
+    
+    const handleShow = () => {
+        setShow(!show)
+    }
+
+    const handleShowBlog= () => {
+        setShowBlog(!showBlog)
+        console.log('clicked')
+    }
 
     if (user === null) {
         return (
@@ -119,10 +130,12 @@ const App = () => {
           <h2>Blogs</h2>
           <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
           <p>{user.name} has logged in.</p>
-          <BlogForm title={newTitle} author={newAuthor} url={newUrl} addBlog={addBlog}
-          setNewAuthor={setNewAuthor} setNewTitle={setNewTitle} setNewUrl={setNewUrl}/>
+          {show === false && <button onClick={handleShow}>New note</button>}
+          {show === true && <BlogForm title={newTitle} author={newAuthor} url={newUrl} addBlog={addBlog}
+          setNewAuthor={setNewAuthor} setNewTitle={setNewTitle} setNewUrl={setNewUrl} handleShow={handleShow}/>}
+          
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} showBlog={showBlog} handleShowBlog={handleShowBlog} />
           )}
           <button onClick={handleLogout}>Log out</button>
         </div>
