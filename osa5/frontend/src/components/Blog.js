@@ -1,17 +1,25 @@
 import React from 'react'
-const Blog = ({ blog, handleShowBlog, showBlog }) => {
+const Blog = ({ blogs, handleShowBlog, showBlog }) => {
 
   if(showBlog)
   return (
-    <div onClick={handleShowBlog}>
-    {blog.title} {blog.url} {blog.likes} added by {blog.author}
+    <div>
+              {blogs.map(blog =>
+             <div onClick={handleShowBlog} key={blog.id}> 
+                  {blog.title} {blog.author}
+            </div>
+          )}
   </div>
   )
 
   if(!showBlog)
   return (
-    <div onClick={handleShowBlog}>
-    {blog.title} {blog.author}
+    <div>
+              {blogs.map(blog =>
+             <div onClick={handleShowBlog} key={blog.id}>
+                   {blog.title} {blog.url} {blog.likes} added by {blog.author}
+              </div>
+          )}
   </div>
   )
 }

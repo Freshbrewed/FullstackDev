@@ -19,8 +19,9 @@ const App = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [message, setMessage] = useState(null)
     const [show, setShow] = useState(false)
-    const [showBlog, setShowBlog] = useState(false)
+    const [showBlog, setShowBlog] = useState()
 
+    
     useEffect(() => {
         blogService
         .getAll()
@@ -115,6 +116,8 @@ const App = () => {
         console.log('clicked')
     }
 
+    console.log(showBlog)
+
     if (user === null) {
         return (
           <div>
@@ -134,9 +137,9 @@ const App = () => {
           {show === true && <BlogForm title={newTitle} author={newAuthor} url={newUrl} addBlog={addBlog}
           setNewAuthor={setNewAuthor} setNewTitle={setNewTitle} setNewUrl={setNewUrl} handleShow={handleShow}/>}
           
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} showBlog={showBlog} handleShowBlog={handleShowBlog} />
-          )}
+
+        <Blog blogs={blogs} showBlog={showBlog} handleShowBlog={handleShowBlog} />
+
           <button onClick={handleLogout}>Log out</button>
         </div>
       )
