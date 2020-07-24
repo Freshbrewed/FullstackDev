@@ -126,7 +126,7 @@ const App = () => {
       }, 5000)
     }
   }
-
+  //.sort((a, b) => a.blog.likes < b.blog.likes ? 1 : -1)
   if (user === null) {
     return (
       <div>
@@ -142,7 +142,7 @@ const App = () => {
       <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
       <p>{user.name} has logged in.</p>
       <BlogForm createBlog={addBlog}/>
-      {blogs.sort((a, b) => a.blog.likes < b.blog.likes ? 1 : -1)
+      {blogs
         .map((blog, index) =>
           <Blog blog={blog} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user} key={index} />
         )}

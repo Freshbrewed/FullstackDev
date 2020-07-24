@@ -45,7 +45,7 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
     return (
       <div style={blogStyle}>
         <div>
-          {blog.blog.title} <button onClick={handleShow}>Hide</button>
+          {blog.blog.title? blog.blog.title: 'testi'}<button onClick={handleShow}>Hide</button>
         </div>
         <div>{blog.blog.url} </div>
         <div>Likes {blog.blog.likes} <button onClick={addLike}>Like</button> </div>
