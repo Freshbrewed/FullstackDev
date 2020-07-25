@@ -22,10 +22,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
   }
 })
 
-
-
 blogsRouter.delete('/:id', async (request, response, next) => {
-
 
   let decodedToken = null
 
@@ -69,8 +66,8 @@ blogsRouter.post('/', async (request, response, next) => {
 
   const user = await User.findById(decodedToken.id)
 
-  if (request.body.title.length === 0 ||
-     request.body.author.length === 0) {
+  if (body.title.length === 0 ||
+     body.author.length === 0) {
     return response.status(400).end()
   }
 
