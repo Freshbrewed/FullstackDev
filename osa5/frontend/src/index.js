@@ -19,9 +19,7 @@ const App = () => {
     blogService
       .getAll()
       .then(initialBlogs => {
-        setBlogs(initialBlogs.map(blog => {
-          return { 'blog': blog }
-        }))
+        setBlogs(initialBlogs)
       })
   }, [])
 
@@ -56,7 +54,7 @@ const App = () => {
       console.log('Following blog has been removed from database.')
       console.log(blogObject)
       const updatedBlogs = blogs
-        .filter(blogs => blogs.blog.id !== blogObject.id)
+        .filter(blogs => blogs.id !== blogObject.id)
       setBlogs(updatedBlogs)
       console.log('Updated current blog list.')
       setMessage(`${blogObject.title} by ${blogObject.author} has been deleted.`)
@@ -73,10 +71,13 @@ const App = () => {
   }
 
   const addLike = (blogObject) => {
+    console.log(blogObject)
+    const blogsWithoutLikedBlog = blogs.filter(blog => blog.id !== blogObject.id)
     blogService
       .update(blogObject.id, blogObject)
       .then(returnedObject => {
-        setBlogs(blogs.concat(returnedObject))
+        console.log(returnedObject)
+        setBlogs(blogsWithoutLikedBlog.concat(returnedObject))
       })
     setMessage('The blog has been liked!')
     setTimeout(() => {
@@ -126,7 +127,8 @@ const App = () => {
       }, 5000)
     }
   }
-  //.sort((a, b) => a.blog.likes < b.blog.likes ? 1 : -1)
+
+
   if (user === null) {
     return (
       <div>
@@ -142,7 +144,7 @@ const App = () => {
       <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
       <p>{user.name} has logged in.</p>
       <BlogForm createBlog={addBlog}/>
-      {blogs
+      {blogs.sort((a, b) => a.likes < b.likes ? 1 : -1)
         .map((blog, index) =>
           <Blog blog={blog} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user} key={index} />
         )}

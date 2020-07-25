@@ -14,8 +14,12 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
   const addLike = (event) => {
     event.preventDefault()
     likedBlog({
-      likes : blog.blog.likes + 1,
-      id : blog.blog.id
+      user: blog.user,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+      id: blog.id
     })
   }
 
@@ -23,9 +27,9 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
     event.preventDefault()
     if(window.confirm('Do you really want to delete selected blog?'))
       deleteBlog({
-        id: blog.blog.id,
-        title: blog.blog.title,
-        author: blog.blog.author
+        id: blog.id,
+        title: blog.title,
+        author: blog.author
       })
   }
 
@@ -41,32 +45,32 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
     setShow(!show)
   }
 
-  if(show === true && loggedUser.username === blog.blog.user.username)
+  if(show === true && loggedUser.username === blog.user.username)
     return (
       <div style={blogStyle}>
         <div>
-          {blog.blog.title? blog.blog.title: 'testi'}<button onClick={handleShow}>Hide</button>
+          {blog.title}<button onClick={handleShow}>Hide</button>
         </div>
-        <div>{blog.blog.url} </div>
-        <div>Likes {blog.blog.likes} <button onClick={addLike}>Like</button> </div>
-        <div>{blog.blog.user.name}</div>
+        <div>{blog.url} </div>
+        <div>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
+        <div>{blog.user.name}</div>
         <button onClick={removeBlog}>Delete</button>
       </div>
     )
-  if(show === true && loggedUser.username !== blog.blog.user.username)
+  if(show === true && loggedUser.username !== blog.user.username)
     return (
       <div style={blogStyle}>
         <div>
-          {blog.blog.title} <button onClick={handleShow}>Hide</button>
+          {blog.title} <button onClick={handleShow}>Hide</button>
         </div>
-        <div>{blog.blog.url} </div>
-        <div>Likes {blog.blog.likes} <button onClick={addLike}>Like</button> </div>
-        <div>{blog.blog.user.name}</div>
+        <div>{blog.url} </div>
+        <div>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
+        <div>{blog.user.name}</div>
       </div>
     )
   return (
     <div style={blogStyle}>
-      {blog.blog.title} {blog.blog.author} <button onClick={handleShow}>View</button>
+      {blog.title} {blog.author} <button onClick={handleShow}>View</button>
     </div>
   )
 }
