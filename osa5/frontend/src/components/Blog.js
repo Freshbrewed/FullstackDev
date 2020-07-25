@@ -6,9 +6,6 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
 
   Blog.propTypes = {
     blog: PropTypes.object.isRequired,
-    likedBlog: PropTypes.func.isRequired,
-    deleteBlog: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
   }
 
   const addLike = (event) => {
@@ -47,19 +44,19 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
 
   if(show === true && loggedUser.username === blog.user.username)
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='owner'>
         <div>
           {blog.title}<button onClick={handleShow}>Hide</button>
         </div>
         <div>{blog.url} </div>
-        <div>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
+        <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
         <div>{blog.user.name}</div>
         <button onClick={removeBlog}>Delete</button>
       </div>
     )
   if(show === true && loggedUser.username !== blog.user.username)
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='notOwner'>
         <div>
           {blog.title} <button onClick={handleShow}>Hide</button>
         </div>
@@ -69,7 +66,7 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
       </div>
     )
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='toggleView'>
       {blog.title} {blog.author} <button onClick={handleShow}>View</button>
     </div>
   )
