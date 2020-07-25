@@ -128,7 +128,7 @@ const App = () => {
     }
   }
 
-
+  console.log(blogs)
   if (user === null) {
     return (
       <div>
