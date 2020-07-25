@@ -93,7 +93,11 @@ blogsRouter.put('/:id', async (request, response, next) => {
   const body = request.body
 
   const blog = {
-    likes: body.likes
+    author: body.author,
+    likes: body.likes,
+    title: body.title,
+    url: body.url,
+    user: body.user.id
   }
   try {
     const blogToUpdate = await Blog
