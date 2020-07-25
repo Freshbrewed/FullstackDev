@@ -45,7 +45,6 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
     setShow(!show)
   }
 
-
   if(show === true && loggedUser.username === blog.user.username)
     return (
       <div style={blogStyle}>

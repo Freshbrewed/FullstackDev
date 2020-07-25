@@ -34,7 +34,12 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     try {
-      const blogToAdd = await blogService.create(blogObject)
+      let blogToAdd = await blogService.create(blogObject)
+      blogToAdd.user = {
+        id: blogToAdd.user,
+        name: user.name,
+        username: user.username
+      }
       setBlogs(blogs.concat(blogToAdd))
       setMessage(`A new blog ${blogToAdd.title} by ${blogToAdd.author} has been added.`)
       setTimeout(() => {
@@ -71,12 +76,15 @@ const App = () => {
   }
 
   const addLike = (blogObject) => {
-    console.log(blogObject)
     const blogsWithoutLikedBlog = blogs.filter(blog => blog.id !== blogObject.id)
     blogService
       .update(blogObject.id, blogObject)
       .then(returnedObject => {
-        console.log(returnedObject)
+        returnedObject.user = {
+          id: returnedObject.user,
+          name: user.name,
+          username: user.username
+        }
         setBlogs(blogsWithoutLikedBlog.concat(returnedObject))
       })
     setMessage('The blog has been liked!')
@@ -128,7 +136,6 @@ const App = () => {
     }
   }
 
-  console.log(blogs)
   if (user === null) {
     return (
       <div>
