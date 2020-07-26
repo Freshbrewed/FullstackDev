@@ -51,7 +51,7 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
         <div>{blog.url} </div>
         <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
         <div>{blog.user.name}</div>
-        <button onClick={removeBlog}>Delete</button>
+        <button id='deleteButton' onClick={removeBlog}>Delete</button>
       </div>
     )
   if(show === true && loggedUser.username !== blog.user.username)
@@ -61,13 +61,13 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
           {blog.title} <button onClick={handleShow}>Hide</button>
         </div>
         <div>{blog.url} </div>
-        <div>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
+        <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
         <div>{blog.user.name}</div>
       </div>
     )
   return (
     <div style={blogStyle} className='toggleView'>
-      {blog.title} {blog.author} <button onClick={handleShow}>View</button>
+      {blog.title} {blog.author} <button id='viewButton' onClick={handleShow}>View</button>
     </div>
   )
 }

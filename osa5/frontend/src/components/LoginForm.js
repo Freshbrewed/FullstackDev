@@ -16,13 +16,13 @@ const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }
       <h2>Log in to application</h2>
       <div>
             Username
-        <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
+        <input id='username' type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
       </div>
       <div>
             Password
-        <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+        <input id='password' type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
       </div>
-      <button type="submit">Login</button>
+      <button id='login' type="submit">Login</button>
     </form>
   )
 }

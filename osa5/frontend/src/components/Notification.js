@@ -13,7 +13,7 @@ const Notification = ({ message, errorMessage, className }) => {
     )
   if (errorMessage)
     return (
-      <div className={className[1]}>{errorMessage}</div>
+      <div id='error' className={className[1]}>{errorMessage}</div>
     )
   return null
 }
