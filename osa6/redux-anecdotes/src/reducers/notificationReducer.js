@@ -1,15 +1,17 @@
 
-export const notificationChange = message => {
-    return {
-        type: 'SET_MESSAGE',
-        message
-    }
-}
-
-export const removeNotification = () => {
-    return {
-        type: 'REMOVE_MESSAGE',
-        message: ''
+export const notificationChange = ( message, duration) => {
+    return async dispatch => {
+        console.log(duration)
+        setTimeout(() => {
+            dispatch({
+                type: 'REMOVE_MESSAGE',
+                message: ''
+            })
+          }, duration * 1000)
+        dispatch({
+            type: 'SET_MESSAGE',
+            message
+        })
     }
 }
 
