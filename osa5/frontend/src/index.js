@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import blogService from './services/blogs'
+import userService from './services/users'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm.js'
 import BlogForm from './components/BlogForm.js'
 import Notification from './components/Notification.js'
+import Users from './components/Users.js'
 import './index.css'
 
 const App = () => {
@@ -12,6 +14,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState(null)
 
@@ -22,6 +25,14 @@ const App = () => {
         setBlogs(initialBlogs)
       })
   }, [])
+
+  useEffect(() => {
+    userService
+      .getAll()
+      .then(initialUsers => {
+        setUsers(initialUsers)
+      })
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
@@ -145,18 +156,25 @@ const App = () => {
       </div>
     )
   }
+
+
   return (
+
     <div>
       <h2>Blogs</h2>
       <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
       <p>{user.name} has logged in.</p>
+
       <BlogForm createBlog={addBlog}/>
       {blogs.sort((a, b) => a.likes < b.likes ? 1 : -1)
         .map((blog, index) =>
           <Blog blog={blog} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user} key={index} />
         )}
+      <Users users={users}/>
       <button onClick={handleLogout}>Log out</button>
+
     </div>
+
   )
 }
 
