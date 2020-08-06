@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useParams, Redirect } from 'react-router-dom'
 
-const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
-  const [show, setShow] = useState(false)
-
-  Blog.propTypes = {
-    blog: PropTypes.object.isRequired,
-  }
+const Blog = ({ blogs, likedBlog, deleteBlog, loggedUser }) => {
+  const [clicked, setClicked] = useState(false)
+  const id = useParams().id
+  const blog = blogs.find(blog => blog.id === id)
 
   const addLike = (event) => {
     event.preventDefault()
@@ -22,6 +20,7 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
 
   const removeBlog = (event) => {
     event.preventDefault()
+    setClicked(!clicked)
     if(window.confirm('Do you really want to delete selected blog?'))
       deleteBlog({
         id: blog.id,
@@ -30,44 +29,29 @@ const Blog = ({ blog, likedBlog, deleteBlog, loggedUser }) => {
       })
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+  if (clicked) return <Redirect to="/" />
 
-  const handleShow = () => {
-    setShow(!show)
-  }
-
-  if(show === true && loggedUser.username === blog.user.username)
+  if (loggedUser.username === blog.user.username)
     return (
-      <div style={blogStyle} className='owner'>
-        <div>
-          {blog.title}<button onClick={handleShow}>Hide</button>
-        </div>
-        <div>{blog.url} </div>
+      <div className='owner'>
+        <h2>
+          {blog.title}
+        </h2>
+        <div><a href={blog.url}>{blog.url}</a> </div>
         <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
-        <div>{blog.user.name}</div>
+        <div>Added by {blog.user.name}</div>
         <button id='deleteButton' onClick={removeBlog}>Delete</button>
       </div>
     )
-  if(show === true && loggedUser.username !== blog.user.username)
-    return (
-      <div style={blogStyle} className='notOwner'>
-        <div>
-          {blog.title} <button onClick={handleShow}>Hide</button>
-        </div>
-        <div>{blog.url} </div>
-        <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
-        <div>{blog.user.name}</div>
-      </div>
-    )
+
   return (
-    <div style={blogStyle} className='toggleView'>
-      {blog.title} {blog.author} <button id='viewButton' onClick={handleShow}>View</button>
+    <div className='notOwner'>
+      <h2>
+        {blog.title}
+      </h2>
+      <div><a href={blog.url}>{blog.url}</a> </div>
+      <div className='likeCount'>Likes {blog.likes} <button onClick={addLike}>Like</button> </div>
+      <div>Added by {blog.user.name}</div>
     </div>
   )
 }

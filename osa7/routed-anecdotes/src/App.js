@@ -55,7 +55,7 @@ const Anecdote = ({ anecdotes }) => {
       has {anecdote.votes} votes
      </div>
       <div >
-      for more info see <a href="url">{anecdote.info}</a>
+      for more info see <a href={anecdote.info}>{anecdote.info}</a>
      </div>
     </div>
   )
@@ -87,10 +87,12 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('author')
   const info  = useField('url')
+  const [click, setClick] = useState(false)
 
-
+  console.log(click)
   const handleSubmit = (e) => {
     e.preventDefault()
+    setClick(!click)
     props.addNew({
       content: content.value,
       author: author.value,
@@ -105,9 +107,9 @@ const CreateNew = (props) => {
     author.reset()
     info.reset()
   }
-  
+ 
+if (click) return <Redirect to="/" />
 
-if (props.notification === '')
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -128,10 +130,6 @@ if (props.notification === '')
       </form>
     </div>
   )
-  return(
-    <Redirect to="/" />
-  )
-
 }
 
 const App = () => {

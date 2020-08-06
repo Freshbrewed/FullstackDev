@@ -1,5 +1,5 @@
 import React from 'react'
-//import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const User = ({ users }) => {
 
@@ -10,20 +10,22 @@ const User = ({ users }) => {
     <div>
       <h2>Users</h2>
       <table>
-        <tr>
-          <th></th>
-          <th></th>
-          <th>
+        <tbody>
+          <tr>
+            <th></th>
+            <th></th>
+            <th>
                 Blogs created
-          </th>
-        </tr>
+            </th>
+          </tr>
+        </tbody>
         {users.map(user =>
-          <div key={user.id}>
+          <tbody key={user.id}>
             <tr>
-              <td>{user.name}</td>
+              <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
               <td style={padding}>{user.blogs.length}</td>
             </tr>
-          </div>
+          </tbody>
         )}
       </table>
     </div>

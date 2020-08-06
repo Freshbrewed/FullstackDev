@@ -7,6 +7,13 @@ import LoginForm from './components/LoginForm.js'
 import BlogForm from './components/BlogForm.js'
 import Notification from './components/Notification.js'
 import Users from './components/Users.js'
+import User from './components/User.js'
+import Blogs from './components/Blogs.js'
+import Menu from './components/Menu.js'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from 'react-router-dom'
 import './index.css'
 
 const App = () => {
@@ -157,24 +164,31 @@ const App = () => {
     )
   }
 
-
   return (
-
-    <div>
-      <h2>Blogs</h2>
-      <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
-      <p>{user.name} has logged in.</p>
-
-      <BlogForm createBlog={addBlog}/>
-      {blogs.sort((a, b) => a.likes < b.likes ? 1 : -1)
-        .map((blog, index) =>
-          <Blog blog={blog} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user} key={index} />
-        )}
-      <Users users={users}/>
-      <button onClick={handleLogout}>Log out</button>
-
-    </div>
-
+    <Router>
+      <div>
+        <Menu loggedUser={user} handleLogout={handleLogout} />
+        <h2>Blog App</h2>
+        <Notification message={message} errorMessage={errorMessage} className={['success', 'error']} />
+        <Switch>
+          <Route path="/users/:id">
+            <User users={users}/>
+          </Route>
+          <Route path="/users">
+            <Users users={users}/>
+          </Route>
+          <Route path="/create">
+            <BlogForm createBlog={addBlog}/>
+          </Route>
+          <Route path="/blogs/:id">
+            <Blog blogs={blogs} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user}/>
+          </Route>
+          <Route path="/">
+            <Blogs blogs={blogs}/>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
