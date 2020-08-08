@@ -1,0 +1,7 @@
+post http://localhost:3003/api/blogs/5f2d48806ffa611ef520f639/comments
+Content-Type: application/json
+
+{
+    "id": "5f2d48806ffa611ef520f639",
+    "comment": "The backend is working!!"
+}

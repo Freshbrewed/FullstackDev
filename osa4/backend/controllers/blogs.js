@@ -1,11 +1,12 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
-    .populate('user', { username: 1, name: 1 })
+    .populate('user comments', { username: 1, name: 1, comment: 1 })
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
@@ -77,6 +78,7 @@ blogsRouter.post('/', async (request, response, next) => {
     author: body.author,
     user: user._id,
     likes: body.likes || 0,
+    comments: []
   })
 
   try {
@@ -89,9 +91,24 @@ blogsRouter.post('/', async (request, response, next) => {
   }
 })
 
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const body = request.body
+  const blog = await Blog.findById(body.id)
+  const newComment = new Comment({
+    comment: body.comment
+  })
+  try {
+    const savedComment = await newComment.save()
+    blog.comments = blog.comments.concat(savedComment._id)
+    await blog.save()
+    response.json(savedComment.toJSON())
+  } catch(exception) {
+    next(exception)
+  }
+})
+
 blogsRouter.put('/:id', async (request, response, next) => {
   const body = request.body
-
   const blog = {
     author: body.author,
     likes: body.likes,
