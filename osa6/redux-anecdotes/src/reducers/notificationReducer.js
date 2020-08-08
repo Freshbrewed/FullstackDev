@@ -1,14 +1,12 @@
-
+let timeOutID = null
 export const notificationChange = ( message, duration) => {
-    let timeOutID = null
-    console.log(timeOutID)
-    
     return async dispatch => {
-
+        clearTimeout(timeOutID)
         dispatch({
             type: 'SET_MESSAGE',
             message
         })
+        
 
         timeOutID = setTimeout(() => {
         dispatch({
