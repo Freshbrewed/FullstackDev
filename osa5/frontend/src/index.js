@@ -100,15 +100,41 @@ const App = () => {
       .then(returnedObject => {
         returnedObject.user = {
           id: returnedObject.user,
-          name: user.name,
-          username: user.username
+          name: blogObject.user.name,
+          username: blogObject.user.username
         }
+        returnedObject.comments = blogObject.comments
         setBlogs(blogsWithoutLikedBlog.concat(returnedObject))
       })
     setMessage('The blog has been liked!')
     setTimeout(() => {
       setMessage(null)
     }, 5000)
+  }
+
+  const addComment = async (comment) => {
+    console.log(comment)
+    const blogToComment = blogs.find(blog => blog.id === comment.id)
+    let comments = blogToComment.comments
+    const blogsWithoutCommented = blogs.filter(blog => blog.id !== comment.id)
+    try{
+      const response = await blogService.comment(comment)
+      comments = comments.concat(response)
+      blogToComment.comments = comments
+      setBlogs(blogsWithoutCommented.concat(blogToComment))
+      setMessage('The blog has been commented!')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch(error) {
+      setErrorMessage('Could not comment on the blog.')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setUsername('')
+      setPassword('')
+    }
+
   }
 
   const handleLogin =  async (event) => {
@@ -181,7 +207,7 @@ const App = () => {
             <BlogForm createBlog={addBlog}/>
           </Route>
           <Route path="/blogs/:id">
-            <Blog blogs={blogs} likedBlog={addLike} deleteBlog={removeBlog} loggedUser={user}/>
+            <Blog blogs={blogs} likedBlog={addLike} deleteBlog={removeBlog} handleComment={addComment} loggedUser={user}/>
           </Route>
           <Route path="/">
             <Blogs blogs={blogs}/>
