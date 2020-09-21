@@ -1,4 +1,6 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
+
 
 let authors = [
   {
@@ -87,7 +89,7 @@ const typeDefs = gql`
   type Author {
     name: String!
     id: ID!
-    born: Int!
+    born: Int
     bookCount: Int
   }
   type Book {
@@ -101,8 +103,22 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String
+      published: Int!
+      genres: [String!]
+    ): Book
+
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ) : Author
   }
 `
 
@@ -111,9 +127,27 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      console.log(args)
-      if (!args.author) return books
-      return books.filter(book => book.author === args.author)
+      console.log('Given arguments: ', args)
+      if (!args.author && !args.genre) return books
+      if (args.author && !args.genre) return books.filter(book => book.author === args.author)
+      if (!args.author && args.genre) {
+        const booksWithSearchedGenre = []
+        books.forEach((book) => {
+          if (book.genres.toString().includes(args.genre))
+          booksWithSearchedGenre.push(book)
+        })
+        return booksWithSearchedGenre
+      }
+      if (args.author && args.genre) {
+        const filteredBooks = books.filter(book => book.author === args.author)
+        const booksWithSearchedGenre = []
+        filteredBooks.forEach((book) => {
+          if (book.genres.toString().includes(args.genre))
+          booksWithSearchedGenre.push(book)
+        })
+        return booksWithSearchedGenre
+      } 
+      return books
     },
     allAuthors: () => authors
   },
@@ -127,7 +161,39 @@ const resolvers = {
       })
       return count
     }
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      if (books.find(e => e.title === args.title)) {
+        throw new UserInputError('Book must be unique', {
+          invalidArgs: args.author,
+        })
+      }
+      if (authors.find(e => e.name !== args.author)) {
+        const author = { 
+          name: args.author,
+          id: uuid(),
+        }
+        authors = authors.concat(author)
+      }
+
+      const book = { ...args, id: uuid()}
+      books = books.concat(book)
+      return book
+    },
+    editAuthor: (root, args) => {
+      const author = authors.find(e => e.name === args.name)
+      if (author) {
+        const withoutSearchedAuthor = authors.filter(e => e.name !== args.name)
+        const updatedAuthor = { ...author, born: args.setBornTo}
+        authors = withoutSearchedAuthor.concat(updatedAuthor)
+        return updatedAuthor
+      }
+      return null
+    }
   }
+  
 }
 
 const server = new ApolloServer({
