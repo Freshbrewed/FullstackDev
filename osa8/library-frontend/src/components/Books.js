@@ -1,13 +1,12 @@
 import React from 'react'
 
 const Books = (props) => {
-  console.log(props.books)
   if (!props.show) {
     return null
   }
 
   const books = [ ...props.books]
-
+  
   return (
     <div>
       <h2>books</h2>

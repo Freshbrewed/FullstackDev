@@ -26,7 +26,6 @@ const ALL_AUTHORS = gql`
     }
   }
 `
-
 const App = () => {
   const authors = useQuery(ALL_AUTHORS)
   const books = useQuery(ALL_BOOKS)
@@ -36,12 +35,12 @@ const App = () => {
     if (authors.data) {
       setPage('authors')
     }
-  }, [authors])
+  }, [authors, books])
 
   if (authors.loading || page === '') return <div>Loading...</div>
 
 
-  //console.log(books.data.allBooks)
+  //console.log(books)
   return (
     <div>
       <div>
