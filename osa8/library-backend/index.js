@@ -167,7 +167,7 @@ const resolvers = {
     addBook: (root, args) => {
       if (books.find(e => e.title === args.title)) {
         throw new UserInputError('Book must be unique', {
-          invalidArgs: args.author,
+          invalidArgs: args.title,
         })
       }
       if (authors.find(e => e.name !== args.author)) {
