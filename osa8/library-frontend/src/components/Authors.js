@@ -1,6 +1,7 @@
   
 import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
+import Select from 'react-select'
 
 const EDIT_AUTHOR = gql`
   mutation changeBornYear($name: String!, $setBornTo: Int!) {
@@ -23,8 +24,8 @@ const ALL_AUTHORS = gql`
 
 
 const Authors = (props) => {
-  const [ author, setAuthor ] = useState('')
   const [ born, setBorn ] = useState('')
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const [ changeBornYear ] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [ 
@@ -37,13 +38,14 @@ const Authors = (props) => {
   }
 
   const authors = [ ...props.authors]
+  const options = authors.map(author => ({value: author.name, label: author.name}))
+
 
   const update = async (event) => {
     event.preventDefault()
-
-    changeBornYear({ variables: { name: author, setBornTo: parseInt(born) } })
-    setAuthor('')
+    changeBornYear({ variables: { name: selectedOption.value, setBornTo: parseInt(born) } })
     setBorn('')
+    setSelectedOption('')
   }
 
 
@@ -72,10 +74,11 @@ const Authors = (props) => {
       </table>
             <h3>Set birthyear</h3>
             <form onSubmit={update}>
-              <div>
-                Name
-                <input value={author} onChange={({ target }) => setAuthor(target.value)}/>
-              </div>
+              <Select
+                defaultValue={selectedOption}
+                onChange={setSelectedOption}
+                options={options}
+              />
               <div>
                 Born
                 <input type="number" value={born} onChange={({ target }) => setBorn(target.value)}/>
