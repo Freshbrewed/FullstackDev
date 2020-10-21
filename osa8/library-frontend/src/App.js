@@ -10,7 +10,6 @@ const ALL_BOOKS = gql`
   query {
     allBooks  {
       title 
-      author
       published 
       genres
     }
@@ -40,7 +39,7 @@ const App = () => {
   if (authors.loading || page === '') return <div>Loading...</div>
 
 
-  //console.log(books)
+  console.log(books.data)
   return (
     <div>
       <div>
