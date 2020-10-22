@@ -9,6 +9,7 @@
   "author": "Erno Seppänen",
   "license": "ISC",
   "dependencies": {
+    "apollo-link-context": "^1.0.20",
     "apollo-server": "^2.17.0",
     "graphql": "^15.3.0",
     "jsonwebtoken": "^8.5.1",

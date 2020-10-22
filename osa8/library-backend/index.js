@@ -90,10 +90,10 @@ const resolvers = {
     allBooks: async (root, args) => {
       console.log('Given arguments: ', args)
       const author = await Author.findOne({ name: args.author})
-      if (!args.author && !args.genre) return await Book.find({})
-      if (args.author && !args.genre) return await Book.find({ author: author })
-      if (!args.author && args.genre) return await Book.find({ genres: args.genre })
-      if (args.author && args.genre) return await Book.find({ author: author, genres: args.genre })
+      if (!args.author && !args.genre) return await Book.find({}).populate("author")
+      if (args.author && !args.genre) return await Book.find({ author: author }).populate("author")
+      if (!args.author && args.genre) return await Book.find({ genres: args.genre }).populate("author")
+      if (args.author && args.genre) return await Book.find({ author: author, genres: args.genre }).populate("author")
       return await Book.find({})
     },
     allAuthors: () => Author.find({}),
@@ -112,6 +112,16 @@ const resolvers = {
       })
       console.log(`Found ${count} books written by ${root.name}`)
       return count
+    }
+  },
+  Book: {
+    author: (root) => {
+      return {
+        name: root.author.name,
+        id: root.author.id,
+        born: root.author.born,
+        bookCount: root.author.bookCount
+      }
     }
   },
   Mutation: {
