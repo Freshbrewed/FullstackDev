@@ -30,6 +30,7 @@ const typeDefs = gql`
   }
   type Token {
     value: String!
+    userGenre: String!
   }
   type Author {
     name: String!
@@ -217,7 +218,7 @@ const resolvers = {
       id: user._id,
     }
     console.log(`Logged user is ${user.username}.`)
-    return { value: jwt.sign(userForToken, JWT_SECRET) }
+    return { value: jwt.sign(userForToken, JWT_SECRET), userGenre: user.favoriteGenre }
   },
 }}
 
