@@ -5,6 +5,8 @@ const Book = require('./models/book')
 const User = require('./models/user')
 const { v1: uuid } = require('uuid')
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 
 
 const MONGODB_URI = 'mongodb+srv://fullstack:fullstack20@cluster0-zeazc.mongodb.net/library?retryWrites=true&w=majority'
@@ -19,7 +21,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
     console.log('Error connection to MongoDB:', error.message)
   })
 
-  const JWT_SECRET = 'REALLY_SECRET_KEY_ID_NO_ONE_KNOWS_ABOUT'
+const JWT_SECRET = 'REALLY_SECRET_KEY_ID_NO_ONE_KNOWS_ABOUT'
 
 
 const typeDefs = gql`
@@ -82,6 +84,10 @@ const typeDefs = gql`
       password: String!
     ): Token
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }  
 `
 
 const resolvers = {
@@ -90,7 +96,7 @@ const resolvers = {
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       console.log('Given arguments: ', args)
-      const author = await Author.findOne({ name: args.author})
+      const author = await Author.findOne({ name: args.author })
       if (!args.author && !args.genre) return await Book.find({}).populate("author")
       if (args.author && !args.genre) return await Book.find({ author: author }).populate("author")
       if (!args.author && args.genre) return await Book.find({ genres: args.genre }).populate("author")
@@ -105,7 +111,7 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {
       const author = await Author.findOne({ name: root.name })
-      const books = await Book.find({author: author})
+      const books = await Book.find({ author: author })
       let count = 0
       books.forEach(() => {
         count += 1
@@ -129,48 +135,50 @@ const resolvers = {
     addBook: async (root, args, context) => {
       console.log("Received arguments", args)
       const currentUser = context.currentUser
-    if (!currentUser) {
-      console.log('Authentication Error')
-      throw new AuthenticationError("not authenticated")
-    }
+      if (!currentUser) {
+        console.log('Authentication Error')
+        throw new AuthenticationError("not authenticated")
+      }
       const author = await Author.findOne({ name: args.author })
       if (author) {
         const book = new Book({ ...args, author: author })
         console.log(`Creating a new book with an existing author: ${book} `)
         try {
-           await book.save()
+          await book.save()
         }
         catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args.title,
-          })    
+          })
+        }
+        pubsub.publish('BOOK_ADDED', { bookAdded: book })
+        return book
       }
-      return book
-    }
-      const newAuthor = new Author({ name: args.author, born: null})
+      const newAuthor = new Author({ name: args.author, born: null })
       const book = new Book({ ...args, author: newAuthor })
       console.log(`Creating a new book with a new author:${newAuthor}, ${book} `)
       try {
         await newAuthor.save()
         await book.save()
-     }
-     catch (error) {
-       throw new UserInputError(error.message, {
-         invalidArgs: args.title,
-       })    
-   }
-   return book
+      }
+      catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args.title,
+        })
+      }
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      return book
     },
     addAuthor: async (root, args) => {
       const author = new Author({ ...args })
       try {
         await author.save()
-     }
-     catch (error) {
-       throw new UserInputError(error.message, {
-         invalidArgs: args,
-       })    
-   }
+      }
+      catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
       return author
     },
     editAuthor: async (root, args, context) => {
@@ -186,41 +194,46 @@ const resolvers = {
         author.born = args.setBornTo
         try {
           await author.save()
-       }
-       catch (error) {
-         throw new UserInputError(error.message, {
-           invalidArgs: args,
-         })    
-     }
+        }
+        catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
         return author
       }
       return null
     },
-  createUser: (root, args) => {
-    console.log('createUser', args)
-    const user = new User({ ...args })
-    return user.save()
-      .catch(error => {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
+    createUser: (root, args) => {
+      console.log('createUser', args)
+      const user = new User({ ...args })
+      return user.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
         })
-      })
-  },
-  login: async (root, args) => {
-    const user = await User.findOne({ username: args.username })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
 
-    if ( !user || args.password !== 'secret' ) {
-      throw new UserInputError("wrong credentials")
-    }
+      if (!user || args.password !== 'secret') {
+        throw new UserInputError("wrong credentials")
+      }
 
-    const userForToken = {
-      username: user.username,
-      id: user._id,
-    }
-    console.log(`Logged user is ${user.username}.`)
-    return { value: jwt.sign(userForToken, JWT_SECRET), userGenre: user.favoriteGenre }
-  },
-}}
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+      console.log(`Logged user is ${user.username}.`)
+      return { value: jwt.sign(userForToken, JWT_SECRET), userGenre: user.favoriteGenre }
+    },
+  }, Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    },
+  }
+}
 
 const server = new ApolloServer({
   typeDefs,
@@ -238,6 +251,7 @@ const server = new ApolloServer({
   }
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
