@@ -1,19 +1,33 @@
 
-
-type Result = string;
-
-const calculateBmi = (a: number, b: number): Result  => {
-
-    const bmi = b / ( (a / 100) * (a / 100) );
-    if ( bmi <= 18.5) return 'Underweight';
-    if ( bmi <= 25 ) return 'Normal (healthy weight)';
-    if ( bmi <= 30 ) return 'Overweight';
-    return 'Obese';
-   
+interface ParsedArguments {
+  height: number;
+  weight: number;
 }
 
+const parseArguments = (args: Array<String>): ParsedArguments => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too many arguments');
 
-  console.log(calculateBmi(180, 74));
-  console.log(calculateBmi(180, 95));
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      weight: Number(args[3])
+    }
+  } else throw new Error('Provided values were not numbers!')
+}
 
+const calculateBmi = (a: number, b: number) => {
 
+  const bmi = b / ((a / 100) * (a / 100));
+  if (bmi <= 18.5) return 'Underweight';
+  if (bmi <= 25) return 'Normal (healthy weight)';
+  if (bmi <= 30) return 'Overweight';
+  return 'Obese';
+}
+
+try {
+  const { height, weight } = parseArguments(process.argv);
+  console.log(calculateBmi(height, weight));
+} catch (e) {
+  console.log('Ooooops, this is my only clue: ', e.message);
+}
