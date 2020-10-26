@@ -8,7 +8,31 @@ interface ExerciseResult {
     average: number;
 }
 
-const exercisecalculator = (days: Array<number>, target: number): ExerciseResult => {
+interface parseExerciseArgs {
+    hours: Array<number>;
+    target: number;
+}
+
+const parsedArguments = (args: Array<String>): parseExerciseArgs => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+
+    let hoursInArray = [];
+    for (let i = 3; i < args.length; i++) {
+        if (isNaN(Number(args[i]))) throw new Error('Your argument had a wrong value! Only numbers allowed.')
+        hoursInArray.push(args[i])
+    }
+    //+e changes string type of element into an int
+    let castToIntArray = hoursInArray.map(e => +e)
+
+    if (!isNaN(Number(args[2]))) {
+        return {
+            hours: castToIntArray,
+            target: Number(args[2])
+        }
+    } else throw new Error('Provided values were not numbers!')
+}
+
+const exerciseCalculator = (target: number, days: Array<number>): ExerciseResult => {
 
     // const daysCount = days.length;
     // const trainingDays = days.filter(c => c !== 0).length;
@@ -54,7 +78,10 @@ const exercisecalculator = (days: Array<number>, target: number): ExerciseResult
     };
 }
 
+try {
+    const { hours, target } = parsedArguments(process.argv);
+    console.log(exerciseCalculator(target, hours));
+} catch (e) {
+    console.log('Whoopsiee, this is all I can get for you this time: ', e.message)
+}
 
-
-
-console.log(exercisecalculator([3, 0, 2, 4.5, 0, 3, 1], 2));
