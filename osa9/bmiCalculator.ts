@@ -16,7 +16,7 @@ const parseArguments = (args: Array<String>): ParsedArguments => {
   } else throw new Error('Provided values were not numbers!')
 }
 
-const calculateBmi = (a: number, b: number) => {
+export const calculateBmi = (a: number, b: number) => {
 
   const bmi = b / ((a / 100) * (a / 100));
   if (bmi <= 18.5) return 'Underweight';
@@ -28,6 +28,7 @@ const calculateBmi = (a: number, b: number) => {
 try {
   const { height, weight } = parseArguments(process.argv);
   console.log(calculateBmi(height, weight));
+
 } catch (e) {
   console.log('Ooooops, this is my only clue: ', e.message);
 }
