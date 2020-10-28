@@ -32,13 +32,14 @@ const parsedArguments = (args: Array<string>): parseExerciseArgs => {
     } else throw new Error('Provided values were not numbers!');
 };
 
-const exerciseCalculator = (target: number, days: Array<number>): ExerciseResult => {
+export const exerciseCalculator = (target: number, days: Array<number>): ExerciseResult => {
 
     // const daysCount = days.length;
     // const trainingDays = days.filter(c => c !== 0).length;
 
+
     const training = days.reduce((acc, current) => {
-        if (current !== 0) {
+        if (current !== 0 && !isNaN(Number(current))) {
             acc.days++;
             acc.hours += current;
         }
