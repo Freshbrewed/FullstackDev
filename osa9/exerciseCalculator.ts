@@ -13,24 +13,24 @@ interface parseExerciseArgs {
     target: number;
 }
 
-const parsedArguments = (args: Array<String>): parseExerciseArgs => {
+const parsedArguments = (args: Array<string>): parseExerciseArgs => {
     if (args.length < 4) throw new Error('Not enough arguments');
 
-    let hoursInArray = [];
+    const hoursInArray = [];
     for (let i = 3; i < args.length; i++) {
-        if (isNaN(Number(args[i]))) throw new Error('Your argument had a wrong value! Only numbers allowed.')
-        hoursInArray.push(args[i])
+        if (isNaN(Number(args[i]))) throw new Error('Your argument had a wrong value! Only numbers allowed.');
+        hoursInArray.push(args[i]);
     }
     //+e changes string type of element into an int
-    let castToIntArray = hoursInArray.map(e => +e)
+    const castToIntArray = hoursInArray.map(e => +e);
 
     if (!isNaN(Number(args[2]))) {
         return {
             hours: castToIntArray,
             target: Number(args[2])
-        }
-    } else throw new Error('Provided values were not numbers!')
-}
+        };
+    } else throw new Error('Provided values were not numbers!');
+};
 
 const exerciseCalculator = (target: number, days: Array<number>): ExerciseResult => {
 
@@ -76,12 +76,12 @@ const exerciseCalculator = (target: number, days: Array<number>): ExerciseResult
         target: target,
         average: average
     };
-}
+};
 
 try {
     const { hours, target } = parsedArguments(process.argv);
     console.log(exerciseCalculator(target, hours));
 } catch (e) {
-    console.log('Whoopsiee, this is all I can get for you this time: ', e.message)
+    console.log('Whoopsiee, this is all I can get for you this time: ', e);
 }
 
