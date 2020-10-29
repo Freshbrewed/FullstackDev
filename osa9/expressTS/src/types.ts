@@ -14,3 +14,5 @@ export interface Diagnose {
     gender: Sex;
     occupation: string;
   }
+
+  export type NonSensitivePatient = Omit<Patient, 'ssn'>
