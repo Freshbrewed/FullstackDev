@@ -1,5 +1,7 @@
 import express from 'express';
 const cors = require('cors');
+import diagnoseRouter from './routes/diagnoses';
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -11,6 +13,8 @@ app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here');
   res.send('pong');
 });
+
+app.use('/api/diagnoses', diagnoseRouter);
 
 app.get('/api/patients', (_req, _res) => {
   console.log('this is not implemented yet');

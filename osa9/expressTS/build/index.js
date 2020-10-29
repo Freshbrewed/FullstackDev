@@ -4,12 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors = require('cors');
 const app = express_1.default();
+app.use(cors());
 app.use(express_1.default.json());
-const PORT = 3000;
-app.get('/ping', (_req, res) => {
+const PORT = 3001;
+app.get('/api/ping', (_req, res) => {
     console.log('someone pinged here');
     res.send('pong');
+});
+app.get('/api/patients', (_req, _res) => {
+    console.log('this is not implemented yet');
 });
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
