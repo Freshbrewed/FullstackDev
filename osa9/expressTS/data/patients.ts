@@ -1,4 +1,7 @@
-[
+
+import { Patient } from "../src/types";
+
+const patients: Array<Patient> = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
@@ -40,3 +43,5 @@
         "occupation": "Digital evangelist"
     }
 ]
+
+export default patients;
