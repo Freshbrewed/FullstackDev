@@ -18,22 +18,43 @@ const App: React.FC = () => {
     }
   ];
 
+  
+  
+  const Header: React.FC<{ headername: string }> = ({ headername }) => (
+    <h1>{headername}</h1>
+  );
+
+
+  interface ContentProps {
+    courseParts: {
+      name: string;
+      exerciseCount: number;
+    }[]
+  }
+  const Content: React.FC<ContentProps> = ({ courseParts }) => (
+    <div>
+      {courseParts.map(part =>
+        <div key={part.name}>
+          <p>
+            {part.name} {part.exerciseCount}
+          </p>
+        </div>
+        )}
+    </div>    
+  );
+
+  const Total: React.FC<{ total: number }> = ({ total }) => (
+    <p>
+      Number of exercises{" "}
+      {total}
+    </p>
+  );
+  
   return (
     <div>
-      <h1>{courseName}</h1>
-      <p>
-        {courseParts[0].name} {courseParts[0].exerciseCount}
-      </p>
-      <p>
-        {courseParts[1].name} {courseParts[1].exerciseCount}
-      </p>
-      <p>
-        {courseParts[2].name} {courseParts[2].exerciseCount}
-      </p>
-      <p>
-        Number of exercises{" "}
-        {courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}
-      </p>
+      <Header headername={courseName} />
+      <Content courseParts={courseParts}/>
+      <Total total={courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}/>
     </div>
   );
 };
