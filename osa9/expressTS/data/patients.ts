@@ -45,10 +45,10 @@ const data = [
     }
 ];
 
-const patients: Patient[] = data.map(obj => {
+const patients: Patient [] = data.map(obj => {
     const object = toNewPatient(obj) as Patient;
     object.id = obj.id;
     return object;
 });
 
-export default patients;
+export default patients;    
