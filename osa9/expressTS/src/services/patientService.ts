@@ -17,7 +17,7 @@ const getNonSensitiveEntries = (): Array<NonSensitivePatient> => {
       gender,
       occupation
     }
-  ))
+  ));
 };
 
 /*
@@ -46,7 +46,7 @@ const addPatient = (patient: NewPatient): Patient => {
 
   patients.push(newPatient);
   return newPatient;
-}
+};
 
 export default {
   getEntries,

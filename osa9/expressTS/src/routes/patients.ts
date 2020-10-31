@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitiveEntries());
-})
+});
 
 router.post('/', (req, res) => {
   const newPatient = toNewPatient(req.body);

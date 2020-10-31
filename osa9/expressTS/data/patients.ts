@@ -43,12 +43,12 @@ const data = [
         "gender": "male",
         "occupation": "Digital evangelist"
     }
-]
+];
 
 const patients: Patient[] = data.map(obj => {
-    const object = toNewPatient(obj) as Patient
-    object.id = obj.id
-    return object
-})
+    const object = toNewPatient(obj) as Patient;
+    object.id = obj.id;
+    return object;
+});
 
 export default patients;
