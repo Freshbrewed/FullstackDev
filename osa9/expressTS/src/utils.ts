@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NewPatient, Sex } from './types';
+import { NewPatient, Gender, Patient } from './types';
 
 
 const parseName = (name: any): string => {
@@ -17,7 +17,7 @@ const parseDateOfBirth = (date: any): string => {
     return date;
 };
 
-const parseGender = (gender: any): Sex => {
+const parseGender = (gender: any): Gender => {
     if (!gender || !isGender(gender)) {
         throw new Error('Incorrect gender or missing value: ' + gender);
     }
@@ -32,18 +32,20 @@ const isDate = (date: any): boolean => {
     return Boolean(Date.parse(date));
 };
 
-const isGender = (param: any): param is Sex => {
-    return Object.values(Sex).includes(param);
+const isGender = (param: any): param is Gender => {
+    return Object.values(Gender).includes(param);
 };
 
 
-const toNewPatient = (object: NewPatient): NewPatient => {
+const toNewPatient = (object: Patient): NewPatient => {
+    
   return {
     name: parseName(object.name),
     dateOfBirth: parseDateOfBirth(object.dateOfBirth),
     ssn: parseName(object.ssn),
     gender: parseGender(object.gender),
-    occupation: parseName(object.occupation)
+    occupation: parseName(object.occupation),
+    entries: object.entries
   };
 };
 
