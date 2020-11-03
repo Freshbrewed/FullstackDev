@@ -45,7 +45,6 @@ const data = [
     }
 ];
 
-//const patientsWithEntry = patients.map(patient => ({...patient, entries: "" as unknown as Entry[]}));
 const patients: Patient [] = data.map(obj => {
     const object = toNewPatient({...obj,
          entries: [] as Entry[],
@@ -56,4 +55,4 @@ const patients: Patient [] = data.map(obj => {
     return object;
 });
 
-export default patients;    
+export default patients;
