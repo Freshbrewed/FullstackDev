@@ -4,26 +4,15 @@ import { useParams } from "react-router-dom";
 import { useStateValue } from "../state";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
+import { setPatient } from "../state/reducer"
 
 
 
 const PatientPage: React.FC = () => {
-   // const [ patient, setPatient ] = useState();
+
     const [{ patient }, dispatch] = useStateValue();
     const { id }  = useParams<{ id: string }>();
-    //const [ newId, setId ] = useState("");   
-
-
-
-    console.log(id);
-    
-    
-   // console.log(patient[id]);
-    
-    
-    //const { newid } = useParams<{ newid: string }>();
-   // console.log(newid); 
-
+   
     useEffect(() => {
         const fetchPatientInfo = async () => {
             try {
@@ -31,7 +20,8 @@ const PatientPage: React.FC = () => {
                     `${apiBaseUrl}/patients/${id}`
                     );
                    console.log("use effect", patient);
-                  dispatch({ type: "SET_PATIENT", payload: patient });
+                 // dispatch({ type: "SET_PATIENT", payload: patient });
+                 dispatch(setPatient(patient));
                   } catch (e) {
                     console.error(e);
                   }
