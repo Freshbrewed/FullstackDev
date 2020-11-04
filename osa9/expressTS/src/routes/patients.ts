@@ -17,6 +17,7 @@ router.get('/:id', (req, res) => {
   } catch(exception) {
     res.send(exception);
   }
+
   
 });
 router.post('/', (req, res) => {
@@ -32,6 +33,13 @@ router.post('/', (req, res) => {
   }*/
   );
   res.json(addedPatient);
+});
+
+router.post('/:id/entries', (req, res) => {
+  console.log(req.body);
+  
+  const patientWithNewEntry = patientService.addEntry(req.params.id, req.body);
+  res.json(patientWithNewEntry);  
 });
 
 export default router;

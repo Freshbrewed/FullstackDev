@@ -1,0 +1,25 @@
+post http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+
+        "date": "2020-01-02",
+        "type": "OccupationalHealthcare",
+        "specialist": "SykeröOccupational",
+        "employerName": "Kela",
+        "diagnosisCodes": [
+                            "Z57.1",
+                            "Z74.3",
+                            "M51.2"
+                          ],
+        "description": "Patient coughing.",
+        "discharge": {
+                 "date": "2020-01-16",
+                 "criteria": "He's not coughing anymore."
+                    }
+            ,
+        "sickLeave": {
+            "startDate": "2020-12-12",
+            "endDate": "2020-12-31"
+        } 
+}

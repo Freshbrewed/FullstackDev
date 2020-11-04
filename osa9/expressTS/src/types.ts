@@ -70,6 +70,8 @@ export interface Diagnosis {
 
   export type NewPatient = Omit<Patient, 'id'>;
 
+  export type NewEntry = Omit<Entry, 'id'>;
+
   export type PublicPatient = Omit<Patient, 'ssn' | 'entries' >;
 
  
