@@ -5,6 +5,9 @@ import { useStateValue } from "../state";
 import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatient } from "../state/reducer"
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
+import AddEntryModal from "../AddEntryModal";
+import { Button } from "semantic-ui-react";
 
 
 
@@ -12,16 +15,18 @@ const PatientPage: React.FC = () => {
 
     const [{ patient, diagnosis }, dispatch] = useStateValue();
     const { id }  = useParams<{ id: string }>();
-
-
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string | undefined>();
    
+    console.log(patient[id]);
+    
     useEffect(() => {
         const fetchPatientInfo = async () => {
             try {
                 const { data: patient } = await axios.get<Patient>(
                     `${apiBaseUrl}/patients/${id}`
                     );
-                  // console.log("use effect", patient);
+                   console.log("use effect", patient);
                  // dispatch({ type: "SET_PATIENT", payload: patient });
                  dispatch(setPatient(patient));
                   } catch (e) {
@@ -39,7 +44,27 @@ const PatientPage: React.FC = () => {
       patient.entries.map((entry: Entry) => 
       entry.description
       )) */
+      const openModal = (): void => setModalOpen(true);
 
+      const closeModal = (): void => {
+        setModalOpen(false);
+        setError(undefined);
+      };
+
+      const submitNewEntry = async (values: EntryFormValues) => {
+        try {
+          const { data: entry } = await axios.post<Entry>(
+            `${apiBaseUrl}/patients/${id}/entries`,
+            values
+          );
+          patient[id].entries.push(entry)
+          dispatch(setPatient(patient[id]));
+          closeModal();
+        } catch (e) {
+          console.error(e.response.data);
+          setError(e.response.data.error);
+        }
+      };
       
       
           
@@ -71,6 +96,13 @@ const PatientPage: React.FC = () => {
                    
                    </div>
                 </div>
+                <AddEntryModal
+                 modalOpen={modalOpen}
+                 onSubmit={submitNewEntry}
+                 error={error}
+                 onClose={closeModal}
+                />
+                <Button onClick={() => openModal()}>Add new entry</Button>
           </div>
         );
     }

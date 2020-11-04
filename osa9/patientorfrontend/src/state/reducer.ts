@@ -1,7 +1,6 @@
 import { State } from "./state";
 import { Patient, Diagnosis } from "../types";
 
-
 export type Action =
   | {
       type: "SET_PATIENT_LIST";
@@ -92,4 +91,5 @@ export const SetDiagnosisList = (diagnosis: Diagnosis[]): Action => {
     payload: diagnosis
   }
 };
+
 
