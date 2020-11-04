@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useStateValue } from "../state";
 import { Patient } from "../types";
+import { Entry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatient } from "../state/reducer"
 
@@ -12,6 +13,7 @@ const PatientPage: React.FC = () => {
 
     const [{ patient }, dispatch] = useStateValue();
     const { id }  = useParams<{ id: string }>();
+
    
     useEffect(() => {
         const fetchPatientInfo = async () => {
@@ -26,11 +28,21 @@ const PatientPage: React.FC = () => {
                     console.error(e);
                   }
                 };
-                if (!patient[id]) fetchPatientInfo();
+                if (!patient[id]) {
+                  fetchPatientInfo();
+                }
 
               },[patient, dispatch, id]);
       
+    
+    const test = Object.values(patient).map((patient: Patient) => 
+      patient.entries.map((entry: Entry) => 
+      entry.description
+      ))
 
+      console.log(test);
+      
+    
               
 
     if (patient[id]) {
@@ -41,8 +53,26 @@ const PatientPage: React.FC = () => {
                  <p>SSN: {patient[id].ssn}</p>
                  <p>Occupation: {patient[id].occupation}</p>
                  <p>Gender: <b>{patient[id].gender}</b></p>
-            </div>
-
+                 <div>
+                   <h4>entries</h4>
+                   <div>
+                     {Object.values(patient).map((patient: Patient) => 
+                       patient.entries.map((entry: Entry) => 
+                       <div key={entry.id}>
+                          {entry.date} {entry.description}
+                          <ul>
+                            {entry.diagnosisCodes?.map((code: string) =>
+                            <li>
+                              {code}
+                            </li>
+                            )}
+                          </ul>
+                        </div>
+                      ))}
+                   
+                   </div>
+                </div>
+          </div>
         );
     }
     return <div>Loading...</div>;
