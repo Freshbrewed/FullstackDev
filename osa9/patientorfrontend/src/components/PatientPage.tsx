@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useStateValue } from "../state";
-import { Patient } from "../types";
-import { Entry } from "../types";
+import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatient } from "../state/reducer"
 
@@ -11,8 +10,9 @@ import { setPatient } from "../state/reducer"
 
 const PatientPage: React.FC = () => {
 
-    const [{ patient }, dispatch] = useStateValue();
+    const [{ patient, diagnosis }, dispatch] = useStateValue();
     const { id }  = useParams<{ id: string }>();
+
 
    
     useEffect(() => {
@@ -21,7 +21,7 @@ const PatientPage: React.FC = () => {
                 const { data: patient } = await axios.get<Patient>(
                     `${apiBaseUrl}/patients/${id}`
                     );
-                   console.log("use effect", patient);
+                  // console.log("use effect", patient);
                  // dispatch({ type: "SET_PATIENT", payload: patient });
                  dispatch(setPatient(patient));
                   } catch (e) {
@@ -35,15 +35,14 @@ const PatientPage: React.FC = () => {
               },[patient, dispatch, id]);
       
     
-    const test = Object.values(patient).map((patient: Patient) => 
+   /* const test = Object.values(patient).map((patient: Patient) => 
       patient.entries.map((entry: Entry) => 
       entry.description
-      ))
+      )) */
 
-      console.log(test);
       
-    
-              
+      
+          
 
     if (patient[id]) {
         return (
@@ -62,8 +61,8 @@ const PatientPage: React.FC = () => {
                           {entry.date} {entry.description}
                           <ul>
                             {entry.diagnosisCodes?.map((code: string) =>
-                            <li>
-                              {code}
+                            <li key={code}>
+                              {code}: {diagnosis[code]?.name}
                             </li>
                             )}
                           </ul>
