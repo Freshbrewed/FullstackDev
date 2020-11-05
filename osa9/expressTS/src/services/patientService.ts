@@ -54,7 +54,7 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-const addEntry = (id: string, entry: NewEntry): Patient => {
+const addEntry = (id: string, entry: NewEntry): Entry => {
 const patientToUpdate = findPatient(id);
 const newEntry = {
   id: uuidv4(),
@@ -62,7 +62,7 @@ const newEntry = {
 };
 patientToUpdate?.entries.push(newEntry as Entry);
 
-return patientToUpdate as Patient;
+return newEntry as Entry;
 
 };
 
