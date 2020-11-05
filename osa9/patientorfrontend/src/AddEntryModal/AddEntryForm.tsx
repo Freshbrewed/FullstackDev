@@ -3,17 +3,23 @@ import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 import { useStateValue } from "../state";
 
-import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import {  Entry, Diagnosis, /*HospitalEntry, Discharge*/ } from "../types";
+import { TextField, DiagnosisSelection, SelectFieldType, TypeOption } from "../AddPatientModal/FormField";
+import {  Diagnosis, HospitalEntry } from "../types";
 
 
 
-export type EntryFormValues = Omit<Entry,"id">;
+export type EntryFormValues = Omit<HospitalEntry,"id">;
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
+
+const typeOptions: TypeOption[] = [
+  { value: "Hospital", label: "Hospital" },
+  { value: "OccupationalHealthcare", label: "OccupationalHealthcare" },
+  { value: "HealthCheck", label: "HealthCheck" }
+];
 
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnosis }] = useStateValue()
@@ -25,11 +31,16 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         specialist: "",
         description: "",
         diagnosisCodes: Array<Diagnosis['code']>(),
+        discharge: {
+          date: "",
+          criteria: ""
+        }
       }}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
+
         if (!values.date || !Boolean(Date.parse(values.date))) {
           errors.date = "Incorret formatting! Please use YYYY-MM-DD date format.";
         }
@@ -45,6 +56,12 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.diagnosisCodes) {
           errors.diagnosisCodes = requiredError;
         }
+        if (!values.discharge.date || !Boolean(Date.parse(values.discharge.date))) {
+         errors.diagnosisCodes = "Incorret formatting! Please use YYYY-MM-DD date format.";
+        }
+        if (!values.discharge.criteria) {
+          errors.criteria = requiredError;
+        }
         return errors;
       }}
     >
@@ -57,11 +74,10 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name="date"
               component={TextField}
             />
-            <Field
+              <SelectFieldType
               label="Type"
-              placeholder="Type"
               name="type"
-              component={TextField}
+              options={typeOptions}
             />
             <Field
               label="Specialist"
@@ -79,7 +95,19 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}
             diagnoses={Object.values(diagnosis)}
-          />    
+            />
+            <Field
+              label="Discharge date"
+              placeholder="YYYY-MM-DD"
+              name="discharge.date"
+              component={TextField}
+            />
+            <Field
+              label="Criteria"
+              placeholder="Criteria"
+              name="discharge.criteria"
+              component={TextField}
+            />     
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
