@@ -17,9 +17,7 @@ const PatientPage: React.FC = () => {
     const { id }  = useParams<{ id: string }>();
     const [modalOpen, setModalOpen] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string | undefined>();
-   
-    console.log(patient[id]);
-    
+       
     useEffect(() => {
         const fetchPatientInfo = async () => {
             try {
@@ -57,6 +55,7 @@ const PatientPage: React.FC = () => {
             `${apiBaseUrl}/patients/${id}/entries`,
             values
           );
+          
           patient[id].entries.push(entry)
           dispatch(setPatient(patient[id]));
           closeModal();

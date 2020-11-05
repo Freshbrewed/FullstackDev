@@ -4,7 +4,7 @@ import { Field, Formik, Form } from "formik";
 import { useStateValue } from "../state";
 
 import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import {  Entry, Diagnosis, HospitalEntry, Discharge } from "../types";
+import {  Entry, Diagnosis, /*HospitalEntry, Discharge*/ } from "../types";
 
 
 
