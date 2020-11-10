@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
@@ -12,7 +13,7 @@ export type GenderOption = {
 export type TypeOption = {
   value: Entry["type"];
   label: string;
-}
+};
 
 type SelectFieldTypeProps = {
   name: string;
@@ -69,8 +70,24 @@ interface TextProps extends FieldProps {
 export const TextField: React.FC<TextProps> = ({
   field,
   label,
-  placeholder
-}) => (
+  placeholder,
+ // form
+}) => {
+
+  /*if (form.errors["discharge.date"] || form.errors["discharge.criteria"]) {
+    console.log(form.errors);
+
+    return (
+      <Form.Field>
+        <label>{label}</label>
+        <Field placeholder={placeholder} {...field} />
+        <div style={{ color:'red' }}>
+        Fields must be NOT empty and properly formatted!
+        </div>
+      </Form.Field>
+      )
+  }*/
+  return (
   <Form.Field>
     <label>{label}</label>
     <Field placeholder={placeholder} {...field} />
@@ -78,7 +95,8 @@ export const TextField: React.FC<TextProps> = ({
       <ErrorMessage name={field.name} />
     </div>
   </Form.Field>
-);
+  );
+};
 
 /*
   for exercises 9.24.-

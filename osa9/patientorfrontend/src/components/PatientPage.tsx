@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useStateValue } from "../state";
 import { Patient, Entry } from "../types";
 import { apiBaseUrl } from "../constants";
-import { setPatient } from "../state/reducer"
+import { setPatient } from "../state/reducer";
 import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
 import AddEntryModal from "../AddEntryModal";
 import { Button } from "semantic-ui-react";
@@ -56,7 +56,7 @@ const PatientPage: React.FC = () => {
             values
           );
           
-          patient[id].entries.push(entry)
+          patient[id].entries.push(entry);
           dispatch(setPatient(patient[id]));
           closeModal();
         } catch (e) {

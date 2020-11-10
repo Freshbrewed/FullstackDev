@@ -21,8 +21,10 @@ const typeOptions: TypeOption[] = [
   { value: "HealthCheck", label: "HealthCheck" }
 ];
 
+
+// eslint-disable-next-line react/prop-types
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [{ diagnosis }] = useStateValue()
+  const [{ diagnosis }] = useStateValue();
   return (
     <Formik
       initialValues={{
@@ -31,17 +33,17 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         specialist: "",
         description: "",
         diagnosisCodes: Array<Diagnosis['code']>(),
-        discharge: {
+        discharge: { 
           date: "",
-          criteria: ""
-        }
+          criteria: "" 
+      }
       }}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
-
-        if (!values.date || !Boolean(Date.parse(values.date))) {
+                
+        if (!values.date || !Date.parse(values.date)) {
           errors.date = "Incorret formatting! Please use YYYY-MM-DD date format.";
         }
         if (!values.type) {
@@ -56,13 +58,15 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.diagnosisCodes) {
           errors.diagnosisCodes = requiredError;
         }
-        if (!values.discharge.date || !Boolean(Date.parse(values.discharge.date))) {
-         errors.diagnosisCodes = "Incorret formatting! Please use YYYY-MM-DD date format.";
+        if (!values.discharge.date || !Date.parse(values.discharge.date)) {
+         errors["discharge.date"] = "Incorret formatting! Please use YYYY-MM-DD date format.";
+        //  values.discharge.date = "Incorret formatting! Please use YYYY-MM-DD date format.";
         }
         if (!values.discharge.criteria) {
-          errors.criteria = requiredError;
+         errors["discharge.criteria"] = requiredError;
+        // values.discharge.criteria = requiredError;
         }
-        return errors;
+        return errors; 
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {

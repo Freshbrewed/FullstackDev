@@ -22,6 +22,8 @@ const genderOptions: GenderOption[] = [
   { value: Gender.Other, label: "Other" }
 ];
 
+
+// eslint-disable-next-line react/prop-types
 export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
